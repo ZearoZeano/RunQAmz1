@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cafe Amazon คิวล่าสุด</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        width: auto;
+        margin: auto;
+        background: url("coffee-1276782_1920.jpg") no-repeat center center fixed;
+        background-size: cover;
+        opacity: 0.8;
+      }
+
+      .customer-display {
+        background-color: #ffffff;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        padding: auto;
+        width: 600px;
+        height: auto;
+        border-radius: 10px;
+      }
+
+      #current-queue {
+        text-align: center;
+        font-size: 5em;
+        font-weight: bold;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #6b8e23;
+      }
+
+      #newnum {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #8d6e63;
+        font-size: 12px;
+        padding: 10px;
+        background-color: #ffffff;
+      }
+
+      #showtext {
+        color: #808000;
+      }
+
+      h1 {
+        font-size: 1em;
+        color: #009688;
+      }
+
+      span {
+        color: red;
+      }
+
+      /* Style for the popup */
+      .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px #000000;
+        z-index: 1000; /* Ensure the popup is on top */
+      }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999; /* Ensure the overlay is below the popup */
+      }
+
+      /* Responsive styling for small screens */
+      @media screen and (max-width: 600px) {
+        body {
+          font-size: 18px;
+        }
+
+        .customer-display {
+          width: 80%;
+        }
+
+        #queue-input {
+          font-size: 1.5em;
+        }
+
+        button {
+          font-size: 1.5em;
+          padding: 10px;
+          margin-top: 10px;
+        }
+      }
+    </style>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then((registration) => {
+            console.log(
+              "Service Worker registered with scope:",
+              registration.scope,
+            );
+          })
+          .catch((error) => {
+            console.error("Service Worker registration failed:", error);
+          });
+      }
+      let getQ = 0;
+      let chkrow = 0;
+      let numnow = 0;
+      function updateQueueDisplay() {
+        fetch("/get-current-queue")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("current-queue").textContent = data.queue;
+            //alert(data.rowQ);
+            if (data.queue < getQ) {
+              chkrow = 1;
+            } else {
+              chkrow = 0;
+            }
+            if (getQ == data.queue) {
+              callqueue();
+            } else if (chkrow == 0) {
+              callqueue();
+            } else {
+              return;
+            }
+          })
+          .catch((error) => {});
+      }
+      //updateQueueDisplay();
+      function uprow() {
+        fetch("/get-current-queue")
+          .then((response) => response.json())
+          .then((data) => {
+            numnow = data.queue;
+          })
+          .catch((error) => {});
+      }
+
+      uprow();
+
+      function callqueue() {
+        const audioElement = document.getElementById(`callsound`);
+        if (audioElement) {
+          audioElement.play();
+        }
+        setTimeout(function () {
+          // Change the URL without triggering a page reload
+          history.pushState({}, null, "/thx.html");
+          // Redirect to the new URL
+          window.location.href = "/thx.html";
+        }, 10000);
+        //alert("ระบบจะปิดตัวเองอัตโนมัติ ขอบคุณที่ใช้บริการค่ะ");
+      }
+      function submitQueue() {
+        const queueInput = document.getElementById("queue-input");
+        const queueNumber = parseInt(queueInput.value, 10);
+
+        // Check if the input is a valid number
+        if (isNaN(queueNumber)) {
+          alert("กรุณากรอกตัวเลขที่ถูกต้อง");
+          return;
+        }
+
+        // Check if the number is within the range of 1-99
+        if (queueNumber < 1 || queueNumber > 99) {
+          alert("กรุณากรอกตัวเลขคิวที่อยู่ในช่วง 1-99 เท่านั้น");
+          return;
+        }
+        getQ = queueNumber;
+        if (getQ < numnow && numnow - getQ > 30) {
+          chkrow = 1;
+        } else {
+          chkrow = 0;
+        }
+
+        setInterval(updateQueueDisplay, 5000);
+        closePopup();
+        // Add validation if needed
+        // Call the server API with the queueNumber
+        // Example: fetch(`/call-queue?number=${queueNumber}`, { method: 'POST' })
+        //   .then(response => response.json())
+        //   .then(data => console.log(data))
+        //   .catch(error => console.error(error));
+      }
+
+      function openPopup() {
+        document.getElementById("popup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+      }
+
+      function closePopup() {
+        document.getElementById("popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+      }
+
+      // Call openPopup() when the page is loaded
+      window.onload = openPopup;
+
+      // Add event listener to close popup when clicking on overlay
+      document.getElementById("overlay").addEventListener("click", closePopup);
+    </script>
+  </head>
+
+  <body>
+    <div class="customer-display">
+      <h1 id="showtext">คิวล่าสุด:</h1>
+      <span id="current-queue">กรุณารอสักครู่</span>
+    </div>
+
+    <!-- Popup Content -->
+    <div id="popup" class="popup">
+      <label for="queue-input">กรุณากรอกตัวเลขคิวของท่านค่ะ : </label>
+      <input type="number" id="queue-input" name="queue-input" />
+      <button onclick="submitQueue()">ยืนยัน</button>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <audio
+      id="callsound"
+      src="sounds/nowQ.mp3"
+      preload="auto"
+      type="audio/mp3"
+    ></audio>
+  </body>
+</html>

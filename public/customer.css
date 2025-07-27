@@ -1,0 +1,65 @@
+
+            
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  
+  width: auto;
+  margin: auto;
+  background: url('coffee-1276782_1920.jpg') no-repeat center center fixed;
+  background-size: cover;
+  opacity:0.8;
+}
+
+.customer-display {
+  background-color: #ffffff; /* ตั้งค่าสีพื้นหลังของแถบเลือกเป็นสีเขียว */
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 600px;
+  height: auto;
+  border-radius: 10px; /* เพิ่มขอบมนของแถบเลือก */
+  
+}
+
+#current-queue {
+  text-align: center;
+  font-size: 22em;
+  font-weight: bold;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #6b8e23; /* ตั้งค่าสีข้อความเป็นขาว */
+}
+
+#newnum {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #8d6e63; /* ตั้งค่าสีข้อความเป็นสีน้ำตาล */
+  font-size: 12px;
+  padding:10px;
+    background-color: #ffffff;
+ 
+}
+
+
+#showtext{
+  color: #808000;
+}
+
+
+h1 {
+    font-size: 50px;
+    color: #009688;
+}
+
+span {
+   
+    color: red;
+}

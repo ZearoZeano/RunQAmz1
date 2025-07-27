@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cafe Amazon คิวล่าสุด</title>
+  
+    <script>
+      let wasOnline = window.navigator.onLine;
+      //document.getElementById('newnum').style.color = 'green';
+      function rewindow() {
+            // สร้างการโหลดค่าคิวจากหน้า index ด้วย JavaScript (โดยใช้ XMLHttpRequest หรือ Fetch API)
+            // แล้วอัปเดตค่าคิวในหน้านี้
+            window.location.reload();
+            
+        }
+
+        // ส่ง ping ไปยังเซิร์ฟเวอร์ทุก 5 วินาที
+        
+
+
+        function updateQueueDisplay() {
+            // สร้างการโหลดค่าคิวจากหน้า index ด้วย JavaScript (โดยใช้ XMLHttpRequest หรือ Fetch API)
+            // แล้วอัปเดตค่าคิวในหน้านี้
+            
+            fetch('/get-current-queue')  // สมมติว่าเรามีเส้นทาง '/get-current-queue' ในเซิร์เวอร์
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('current-queue').textContent = data.queue;
+                    document.getElementById('showtext').textContent = "คิวล่าสุด:";
+                    document.getElementById('newnum').style.color = 'green';
+                    document.getElementById('newnum').textContent = "สถานะออนไลน์";
+                    document.getElementById('showtext').style.color = '#808000';
+  
+                    
+                })
+                .catch(error => {
+                    document.getElementById('newnum').style.color = 'red';
+                    document.getElementById('newnum').textContent = "สถานะออฟไลน์";
+                    document.getElementById('showtext').textContent = "โปรดตรวจสอบอินเทอร์เน็ต";
+                    document.getElementById('showtext').style.color = 'red';
+                    //const interval = setInterval(() => {
+                    checkInternetConnection();
+                        /*if (isOnline) {
+                            clearInterval(interval); // หยุดการเช็คเมื่อกลับมาเป็นออนไลน์
+                        }
+                    }, 1000);
+                    //rewindow();
+                    //chkcon();*/
+                });
+         
+                
+        }
+        
+
+        // อัปเดตค่าคิวทุกๆ 5 วินาที (หรือความถี่ที่คุณต้องการ)
+        setInterval(updateQueueDisplay, 1000);
+        //setInterval(pingServer, 5000);
+        function chkcon() {
+            // สร้างการโหลดค่าคิวจากหน้า index ด้วย JavaScript (โดยใช้ XMLHttpRequest หรือ Fetch API)
+            // แล้วอัปเดตค่าคิวในหน้านี้
+            
+            fetch('/chk')  // สมมติว่าเรามีเส้นทาง '/get-current-queue' ในเซิร์เวอร์
+                .then(response => response.json())
+                .then(data => {
+                    //console.log('การเชื่อมต่อสมบูรณ์');
+                    
+                    
+                })
+                .catch(error => {
+                    
+                    //console.log('การเชื่อมขาดหาย');
+                    
+                    //setInterval(checkInternetConnection, 30000);
+                    
+                });      
+        }
+        setInterval(chkcon, 120000);
+        function checkInternetConnection() {
+            const isOnline = window.navigator.onLine;
+            window.addEventListener('offline', function () {
+            navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+                .then(function (registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function (error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+            });
+
+            window.addEventListener('online', function () {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                        for (const registration of registrations) {
+                            registration.unregister();
+                        }
+                    });
+                }
+            });
+            
+
+            //wasOnline = isOnline;
+        }
+        
+
+      // เรียกฟังก์ชัน checkInternetConnection ในระยะเวลาที่คุณต้องการ
+        //setInterval(checkInternetConnection,600000);
+       // setInterval(rewindow, 600000);
+      
+        //setInterval(window.location.reload();, 36000);
+       
+    </script>
+    <link rel="stylesheet" href="customer.css">
+</head>
+<body>
+  <div id="status">
+    <h1 id="newnum">สถานะออนไลน์</h1>
+  </div>
+  
+    <div class="customer-display">
+        <h1 id="showtext">คิวล่าสุด:</h1>
+        <span id="current-queue">0</span>
+    </div>
+</body>
+</html>

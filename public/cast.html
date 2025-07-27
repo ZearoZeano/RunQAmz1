@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue Display</title>
+  <style>
+    /* ซ่อนทั้งหมดเมื่อขนาดหน้าจอไม่ถึง 768px */
+    #tv-controls {
+      display: block;
+    }
+
+    @media only screen and (max-width: 767px) {
+      #tv-controls {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ส่วนของ TV Controls -->
+  <div id="tv-controls">
+    <!-- ปุ่มหรือ element อื่น ๆ ที่ต้องการแสดงบนทีวี -->
+    <button id="enqueue-button-tv">111</button>
+    <!-- เพิ่ม element อื่น ๆ ตามต้องการ -->
+  </div>
+
+  <!-- ส่วนของหน้าจอทั่วไป -->
+  <div id="full-screen-controls">
+    <!-- ปุ่มหรือ element ทั่วไปที่ไม่ต้องการแสดงบนทีวี -->
+    <!-- เพิ่ม element อื่น ๆ ตามต้องการ -->
+    <button id="enqueue-button-phone">222</button>
+  </div>
+
+  <script>
+    // เพิ่มการเช็คขนาดหน้าจอและ alert ในตัวอย่างโค้ด
+    function checkWindowSize() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      alert(`Width: ${width}, Height: ${height}`);
+    }
+
+    // ตรวจสอบเงื่อนไขหน้าจอและซ่อน/แสดง element ตามเงื่อนไข
+    window.addEventListener('resize', () => {
+      const tvControls = document.getElementById('tv-controls');
+      const fullScreenControls = document.getElementById('full-screen-controls');
+      const enqueueButtonTV = document.getElementById('enqueue-button-tv');
+      const enqueueButtonPhone = document.getElementById('enqueue-button-phone');
+
+      if (window.innerWidth >= 768) {
+        tvControls.style.display = 'block';
+        fullScreenControls.style.display = 'none';
+        enqueueButtonTV.style.display = 'block';
+        enqueueButtonPhone.style.display = 'none';
+      } else {
+        tvControls.style.display = 'none';
+        fullScreenControls.style.display = 'block';
+        enqueueButtonTV.style.display = 'none';
+        enqueueButtonPhone.style.display = 'block';
+      }
+    });
+
+    // เรียกใช้ฟังก์ชันเพื่อตั้งค่าแสดงผลตามขนาดหน้าจอเริ่มต้น
+    window.dispatchEvent(new Event('resize'));
+
+    // เพิ่ม Event Listener สำหรับปุ่มเช็คขนาดจอ
+    document.getElementById('check-size-button').addEventListener('click', checkWindowSize);
+
+    // เพิ่ม Chromecast API
+    cast.framework.CastContext.getInstance().setOptions({
+      receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+      autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+    });
+  </script>
+
+  <!-- ปุ่มเพิ่มไว้ด้านล่างเพื่อทำการเช็คขนาดจอ -->
+  <button id="check-size-button">Check Window Size</button>
+
+  <!-- เพิ่ม Chromecast SDK -->
+  <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+</body>
+</html>

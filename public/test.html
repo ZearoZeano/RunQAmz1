@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cafe Amazon คิวแสดงผล</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- ในส่วน head หรือตำแหน่งที่เหมาะสม -->
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+          for (let i = 1; i <= 99; i++) {
+              addAudioElementToBody(i);
+          }
+      });
+
+      function addAudioElementToBody(queueNumber) {
+          const audioElement = document.createElement('audio');
+          audioElement.id = `audio-${queueNumber}`;
+          audioElement.src = `https://cdn.glitch.global/5e8236f5-2ff9-478e-8f63-21a9df7a5ea2/${queueNumber}.mp3`;
+
+          // Optional: ทำการ preload เสียง
+          audioElement.preload = 'auto';
+
+          document.body.appendChild(audioElement);
+      }
+
+    </script>
+
+  </head>
+  <body>
+    <audio id="testsound" src="https://cdn.glitch.global/5e8236f5-2ff9-478e-8f63-21a9df7a5ea2/cafeamazon.mp3?v=1700096312473" preload="auto"></audio>
+    <div class="queue-container">
+      <img src="cafe-amazon-logo.png" alt="Cafe Amazon Logo" width="150" />
+      <h1>คิวปัจจุบัน: <span id="current-queue">0</span></h1>
+      <button id="enqueue-button">คิวถัดไป+</button>
+      <button id="requeue-button">เรียกซ้ำ</button>
+      <button id="newnum">ปิดวัน</button>
+      <button id="setnum">ตั้งค่าคิวใหม่</button>
+    </div>
+    <h2>Queue List</h2>
+    <div id="queue-list"></div>
+    <div id="loading-popup" class="popup">
+      <p>กำลังโหลด...</p>
+    </div>
+    <!-- ... (เนื้อหาที่เหมือนเดิม) -->
+    <div id="requeue-popup" class="popup">
+      <p>ป้อนเลขคิวที่ต้องการเรียกซ้ำ:</p>
+      <input type="number" id="requeue-input" />
+      <button id="confirm-requeue-button">เรียกคิว</button>
+      <button id="cancel-requeue-button">ยกเลิก</button>
+    </div>
+    <!-- ... (เนื้อหาที่เหมือนเดิม) -->
+    <div id="setqueue-popup" class="popup">
+      <p>ป้อนเลขคิวที่ต้องการตั้งค่า:</p>
+      <input type="number" id="set-input" />
+      <button id="confirm-set-button">ยืนยัน</button>
+      <button id="cancel-set-button">ยกเลิก</button>
+    </div>
+    <script src="apptest.js"></script>
+  </body>
+</html>
