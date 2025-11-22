@@ -159,7 +159,7 @@
       uprow();
 
       function callqueue() {
-        alert(chkrow);
+        
         const audioElement = document.getElementById(`callsound`);
         if (audioElement) {
           audioElement.play();
@@ -193,7 +193,7 @@
         } else {
           chkrow = 0;
         }
-
+        alert(chkrow);
         setInterval(updateQueueDisplay, 5000);
         closePopup();
         // Add validation if needed
