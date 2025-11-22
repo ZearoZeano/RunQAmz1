@@ -130,7 +130,7 @@
           .then((response) => response.json())
           .then((data) => {
             document.getElementById("current-queue").textContent = data.queue;
-            //alert(data.rowQ);
+            alert(chkrow);
             if (data.queue < getQ) {
               chkrow = 1;
             } else {
