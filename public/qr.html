@@ -130,7 +130,7 @@
           .then((response) => response.json())
           .then((data) => {
             document.getElementById("current-queue").textContent = data.queue;
-            alert(chkrow);
+            
             if (data.queue < getQ) {
               chkrow = 1;
             } else {
@@ -159,6 +159,7 @@
       uprow();
 
       function callqueue() {
+        alert(chkrow);
         const audioElement = document.getElementById(`callsound`);
         if (audioElement) {
           audioElement.play();
